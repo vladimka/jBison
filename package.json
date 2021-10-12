@@ -1,0 +1,31 @@
+{
+  "name": "jbison",
+  "version": "0.0.1",
+  "description": "A simple programming language written in JavaScript and Jison",
+  "main": "dist/interpreter.js",
+  "dependencies": {
+    "gulp": "^4.0.2",
+    "gulp-jison": "^1.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build" : "gulp && tsc",
+    "postinstall" : "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vladimka/jBison.git"
+  },
+  "keywords": [
+    "programming",
+    "language",
+    "jison"
+  ],
+  "author": "Vladimka",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vladimka/jBison/issues"
+  },
+  "homepage": "https://github.com/vladimka/jBison#readme"
+}
