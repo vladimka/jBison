@@ -1,13 +1,22 @@
-const { src, watch, dest } = require('gulp');
+const { src, watch, dest, series, parallel } = require('gulp');
 const jison = require('gulp-jison');
+const ts = require('gulp-typescript');
 
-function defaultTask(){
-    return src('./src/**/*.jison')
-        .pipe(jison({
-            moduleType: 'commonjs'
-        }))
-        .pipe(dest('./dist'));
+const tsProject = ts.createProject('tsconfig.json');
+
+function buildTypescript(){
+    return src('./src/**/*.ts')
+        .pipe(tsProject())
+        .pipe(dest('dist'));
 }
 
-exports.watch = () => watch('./src/**/*.jison', defaultTask);
-exports.default = defaultTask;
+function buildJison(){
+    return src('./src/**/*.jison')
+        .pipe(jison({
+            moduleType : 'commonjs'
+        }))
+        .pipe(dest('dist'));
+}
+
+exports.default = () => series(buildJison, buildTypescript);
+exports.dev = () => watch('src/**/*.*', parallel(buildJison, buildTypescript));

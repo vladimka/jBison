@@ -1,10 +1,10 @@
 import Value from "./values/Value";
 
 export default class Context{
-    private variables: Object;
+    public variables: Object;
 
-    constructor(){
-        this.variables = {};
+    constructor(variables?: object){
+        this.variables = variables || {};
     }
 
     set(varName: string, value: Value){

@@ -6,7 +6,10 @@ import AssignExpression from "./expressions/AssignExpression";
 import StringExpression from "./expressions/StringExpression";
 import VariableExpression from "./expressions/VariableExpression";
 import UndefinedExpression from "./expressions/UndefinedExpression";
-import Value from "./values/Value";
+import BooleanExpression from "./expressions/BooleanExpression";
+import FunctionExpression from "./expressions/FunctionExpression";
+import FunctionValue from "./values/FunctionValue";
+import UndefinedValue from "./values/UndefinedValue";
 
 class Program{
     private expressionList: Array<Expression>;
@@ -15,6 +18,12 @@ class Program{
     constructor(expressionlist){
         this.expressionList = expressionlist;
         this.context = new Context();
+        this.context.set("print", new FunctionValue((_context, args) => {
+            let out = '';
+            args.forEach(arg => out += arg.asString() + ' ');
+            console.log(out);
+            return new UndefinedValue();
+        }));
     }
 
     execute(): string {
@@ -37,5 +46,7 @@ export default {
     StringExpression,
     VariableExpression,
     UndefinedExpression,
+    BooleanExpression,
+    FunctionExpression,
     Program
 }

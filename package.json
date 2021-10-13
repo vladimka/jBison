@@ -1,17 +1,18 @@
 {
-  "name": "jbison",
+  "name": "slack-baked",
   "version": "0.0.1",
   "description": "A simple programming language written in JavaScript and Jison",
   "main": "dist/interpreter.js",
-  "dependencies": {
+  "devDependencies": {
     "gulp": "^4.0.2",
-    "gulp-jison": "^1.2.0"
+    "gulp-jison": "^1.2.0",
+    "gulp-typescript": "^6.0.0-alpha.1",
+    "typescript": "^4.4.4"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build" : "gulp && tsc",
-    "postinstall" : "npm run build"
+    "build": "gulp",
+    "postinstall": "npm run build"
   },
   "repository": {
     "type": "git",

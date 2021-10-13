@@ -31,8 +31,11 @@ const lib = require('./lib/').default;
 "|"                   {return "|"}
 "&"                   {return "&"}
 
-"true"                {return "TRUE"}
-"false"               {return "FALSE"}
+"?"                   {return "?"}
+":"                   {return ":"}
+
+"true"                {return "true"}
+"false"               {return "false"}
 "fn"                  {return "fn"}
 "forever"             {return "forever"}
 "if"                  {return "if"}
@@ -72,8 +75,17 @@ expressionsBlock
 expression
     : WORD "=" expression1
         {$$ = new lib.AssignExpression($1, $3)}
+    | WORD "(" args_list ")"
+        {$$ = new lib.FunctionExpression($1, $3)}
     | expression1
         {$$ = $1}
+    ;
+
+args_list: {$$ = []}
+    | expression
+        {$$ = [$1]}
+    | args_list "," expression
+        {$$ = $1.concat($3)}
     ;
 
 expression1
@@ -85,6 +97,10 @@ expression1
         {$$ = new lib.BinaryExpression($1, $3, "/")}
     | expression1 "*" expression1
         {$$ = new lib.BinaryExpression($1, $3, "*")}
+    | expression1 ">" expression1
+        {$$ = new lib.BinaryExpression($1, $3, ">")}
+    | expression1 "<" expression1
+        {$$ = new lib.BinaryExpression($1, $3, "<")}
     | "(" expression1 ")"
         {$$ = $2}
     | NUMBER
@@ -93,6 +109,10 @@ expression1
         {$$ = new lib.StringExpression(yytext.replace(/"/g, ''))}
     | WORD
         {$$ = new lib.VariableExpression(yytext)}
+    | true
+        {$$ = new lib.BooleanExpression("true")}
+    | false
+        {$$ = new lib.BooleanExpression("false")}
     | undefined
         {$$ = new lib.UndefinedExpression()}
     ;
