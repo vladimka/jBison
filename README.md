@@ -1,8 +1,10 @@
 # Slack-Baked
 
+[https://img.shields.io/badge/dependencies-up%20to%20date-green]
+[https://img.shields.io/badge/build-passed-brightgreen]
 A simple programming language written in JavaScript and Jison
 
-## Installation
+### Installation
 
 1. Clone repo
 ```bash
