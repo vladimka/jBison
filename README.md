@@ -1,7 +1,6 @@
 # Slack-Baked
 
-[https://img.shields.io/badge/dependencies-up%20to%20date-green]
-[https://img.shields.io/badge/build-passed-brightgreen]
+<img src="https://img.shields.io/badge/dependencies-up%20to%20date-green">
 A simple programming language written in JavaScript and Jison
 
 ### Installation
