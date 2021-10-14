@@ -13,6 +13,8 @@ import UndefinedValue from "./values/UndefinedValue";
 import BlockExpression from "./expressions/BlockExpression";
 import IfExpression from "./expressions/IfExpression";
 import WhileExpression from "./expressions/WhileExpression";
+import UserFunctionExpression from "./expressions/UserFunctionExpression";
+import ReturnExpression from "./expressions/ReturnExpression";
 
 class Program{
     private expressionList: Array<Expression>;
@@ -21,7 +23,7 @@ class Program{
     constructor(expressionlist){
         this.expressionList = expressionlist;
         this.context = new Context();
-        this.context.set("print", new FunctionValue((_context, args) => {
+        this.context.set("print", new FunctionValue((context, args) => {
             let out = '';
             args.forEach(arg => out += arg.asString() + ' ');
             console.log(out);
@@ -33,6 +35,8 @@ class Program{
         for(let expression of this.expressionList){
             expression.eval(this.context);
         }
+
+        console.log(this.context, '\n', JSON.stringify(this.expressionList, null, '\t'));
     }
 }
 
@@ -49,5 +53,7 @@ export default {
     BlockExpression,
     IfExpression,
     WhileExpression,
+    UserFunctionExpression,
+    ReturnExpression,
     Program
 }

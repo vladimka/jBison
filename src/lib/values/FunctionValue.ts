@@ -7,8 +7,6 @@ export default class FunctionValue extends Value {
     }
 
     execute(context: Context, args: Array<Value>){
-        let new_context = new Context(context.variables);
-
-        return this.value(new_context, args);
+        return this.value(context, args);
     }
 }

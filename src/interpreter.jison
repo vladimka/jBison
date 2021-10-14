@@ -23,9 +23,9 @@ const lib = require('./lib/').default;
 ","                   {return ",";}
 "{"                   {return "{";}
 "}"                   {return "}";}
-
+"=="                  {return "=="}
+"||"                  {return "||"}
 "="                   {return "=";}
-
 "<"                   {return "<"}
 ">"                   {return ">"}
 "|"                   {return "|"}
@@ -41,6 +41,7 @@ const lib = require('./lib/').default;
 "else"                {return "else"}
 "undefined"           {return "undefined"}
 "while"               {return "while"}
+"return"              {return "return"}
 
 [a-zA-Z]+             {return "WORD"}
 
@@ -50,10 +51,12 @@ const lib = require('./lib/').default;
 
 /* operator associations and precedence */
 
-%left "<" ">"
-%left '+' '-'
-%left '*' '/'
-%left '^'
+
+%left "+" "-"
+%left "*" "/"
+%left ">" "<"
+%left "=="
+%left "||"
 %left UMINUS
 
 %start file
@@ -75,7 +78,7 @@ expressionsBlock
 expression
     : WORD "=" expression1
         {$$ = new lib.AssignExpression($1, $3)}
-    | WORD "(" args_list ")"
+    | WORD "(" expression_list ")"
         {$$ = new lib.FunctionExpression($1, $3)}
     | "if" "(" expression1 ")" "{" expressionsBlock "}"
         {$$ = new lib.IfExpression($3, new lib.BlockExpression($6), null)}
@@ -83,12 +86,23 @@ expression
         {$$ = new lib.IfExpression($3, new lib.BlockExpression($6), new lib.BlockExpression($10))}
     | "while" "(" expression1 ")" "{" expressionsBlock "}"
         {$$ = new lib.WhileExpression($3, new lib.BlockExpression($6))}
+    | "fn" WORD "(" args_list ")" "{" expressionsBlock "}"
+        {$$ = new lib.UserFunctionExpression($2, $4, new lib.BlockExpression($7))}
+    | "return" expression1
+        {$$ = new lib.ReturnExpression($2)}
+    ;
+
+expression_list: {$$ = []}
+    | expression1
+        {$$ = [$1]}
+    | expression_list "," expression1
+        {$$ = $1.concat($3)}
     ;
 
 args_list: {$$ = []}
-    | expression1
+    | WORD
         {$$ = [$1]}
-    | args_list "," expression1
+    | args_list "," WORD
         {$$ = $1.concat($3)}
     ;
 
@@ -105,8 +119,14 @@ expression1
         {$$ = new lib.BinaryExpression($1, $3, ">")}
     | expression1 "<" expression1
         {$$ = new lib.BinaryExpression($1, $3, "<")}
+    | expression1 "==" expression1
+        {$$ = new lib.BinaryExpression($1, $3, '==')}
+    | expression1 "||" expression1
+        {$$ = new lib.BinaryExpression($1, $3, '||')}
     | "(" expression1 ")"
         {$$ = $2}
+    | WORD "(" expression_list ")"
+        {$$ = new lib.FunctionExpression($1, $3)}
     | NUMBER
         {$$ = new lib.NumberExpression(yytext)}
     | STRING

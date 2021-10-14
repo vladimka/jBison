@@ -6,4 +6,8 @@ export default class UndefinedValue extends Value {
     asString(){
         return "undefined";
     }
+
+    asBoolean(){
+        return false;
+    }
 }
