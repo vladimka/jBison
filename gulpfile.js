@@ -18,5 +18,7 @@ function buildJison(){
         .pipe(dest('dist'));
 }
 
-exports.default = () => series(buildJison, buildTypescript);
 exports.dev = () => watch('src/**/*.*', parallel(buildJison, buildTypescript));
+exports.watchJison = () => watch('src/interpreter.jison', buildJison);
+exports.watchTS = () => watch('src/lib/**/*.ts', buildTypescript);
+exports.default = series(buildTypescript, buildJison);

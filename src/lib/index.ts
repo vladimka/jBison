@@ -10,6 +10,9 @@ import BooleanExpression from "./expressions/BooleanExpression";
 import FunctionExpression from "./expressions/FunctionExpression";
 import FunctionValue from "./values/FunctionValue";
 import UndefinedValue from "./values/UndefinedValue";
+import BlockExpression from "./expressions/BlockExpression";
+import IfExpression from "./expressions/IfExpression";
+import WhileExpression from "./expressions/WhileExpression";
 
 class Program{
     private expressionList: Array<Expression>;
@@ -26,15 +29,10 @@ class Program{
         }));
     }
 
-    execute(): string {
-        let retVal;
-
+    execute(): void {
         for(let expression of this.expressionList){
-            retVal = expression.eval(this.context);
+            expression.eval(this.context);
         }
-        // console.log(this.context);
-
-        return retVal.asString() || new UndefinedExpression();
     }
 }
 
@@ -48,5 +46,8 @@ export default {
     UndefinedExpression,
     BooleanExpression,
     FunctionExpression,
+    BlockExpression,
+    IfExpression,
+    WhileExpression,
     Program
 }

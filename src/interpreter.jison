@@ -37,10 +37,10 @@ const lib = require('./lib/').default;
 "true"                {return "true"}
 "false"               {return "false"}
 "fn"                  {return "fn"}
-"forever"             {return "forever"}
 "if"                  {return "if"}
 "else"                {return "else"}
 "undefined"           {return "undefined"}
+"while"               {return "while"}
 
 [a-zA-Z]+             {return "WORD"}
 
@@ -62,7 +62,7 @@ const lib = require('./lib/').default;
 
 file
     : expressionsBlock EOF
-        {console.log(new lib.Program($1).execute())}
+        {new lib.Program($1).execute()}
     ;
 
 expressionsBlock
@@ -77,14 +77,18 @@ expression
         {$$ = new lib.AssignExpression($1, $3)}
     | WORD "(" args_list ")"
         {$$ = new lib.FunctionExpression($1, $3)}
-    | expression1
-        {$$ = $1}
+    | "if" "(" expression1 ")" "{" expressionsBlock "}"
+        {$$ = new lib.IfExpression($3, new lib.BlockExpression($6), null)}
+    | "if" "(" expression1 ")" "{" expressionsBlock "}" "else" "{" expressionsBlock "}"
+        {$$ = new lib.IfExpression($3, new lib.BlockExpression($6), new lib.BlockExpression($10))}
+    | "while" "(" expression1 ")" "{" expressionsBlock "}"
+        {$$ = new lib.WhileExpression($3, new lib.BlockExpression($6))}
     ;
 
 args_list: {$$ = []}
-    | expression
+    | expression1
         {$$ = [$1]}
-    | args_list "," expression
+    | args_list "," expression1
         {$$ = $1.concat($3)}
     ;
 
